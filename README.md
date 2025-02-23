@@ -54,4 +54,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Contact
 
-For enterprise inquiries: harshkumarconnect@gmail.com
+For enterprise inquiries: harshkumar808348gmail.com
