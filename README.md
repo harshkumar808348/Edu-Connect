@@ -7,8 +7,8 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
  ![image alt](https://github.com/harshkumar808348/Edu-Connect/blob/74234b19b53ea55914b537f786e1fb983a5f678c/Screenshot%202025-02-24%20002004.png)
-![image alt](https://github.com/harshkumar808348/iMAGES-EDUCATION-PORTAL/blob/cd9dd78dac04d3be1eaf53fd578d428d6c108057/Screenshot%202025-01-08%20203430.png)
-![image alt](https://github.com/harshkumar808348/iMAGES-EDUCATION-PORTAL/blob/cd9dd78dac04d3be1eaf53fd578d428d6c108057/Screenshot%202025-01-08%20203550.png)
+![image alt](https://github.com/harshkumar808348/Edu-Connect/blob/3fcca3b2ce10cd745d3ea39229b1b1e7bcc7702d/Screenshot%202025-02-24%20002149.png)
+![image alt](https://github.com/harshkumar808348/Edu-Connect/blob/3fcca3b2ce10cd745d3ea39229b1b1e7bcc7702d/Screenshot%202025-02-24%20002254.png)
 
 ## API Endpoints
 
