@@ -106,7 +106,6 @@ router.post('/teacher/register', [...validateRegistration,
 router.post('/student/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log('Student login attempt:', email);
 
     // Find student
     const student = await Student.findOne({ email });
@@ -137,7 +136,9 @@ router.post('/student/login', async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Student login error:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Student login error:', error);
+    }
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -146,7 +147,6 @@ router.post('/student/login', async (req, res) => {
 router.post('/teacher/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log('Teacher login attempt:', email);
 
     // Find teacher
     const teacher = await Teacher.findOne({ email });
@@ -177,7 +177,9 @@ router.post('/teacher/login', async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Teacher login error:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Teacher login error:', error);
+    }
     res.status(500).json({ message: 'Server error' });
   }
 });

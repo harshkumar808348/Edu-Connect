@@ -23,7 +23,7 @@ const StudentLogin = () => {
     setError('');
     
     try {
-      const response = await fetch('http://localhost:5000/api/auth/student/login', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/student/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

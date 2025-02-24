@@ -19,7 +19,10 @@ const app = express();
 const httpServer = createServer(app);
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "http://localhost:5173", // Vite's default port
+  credentials: true
+}));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
@@ -42,10 +45,9 @@ app.use('/api/chat', chatRoutes);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
     methods: ["GET", "POST"],
-    credentials: true,
-    allowEIO3: true
+    credentials: true
   },
   pingTimeout: 60000,
   pingInterval: 25000
@@ -75,11 +77,8 @@ io.use((socket, next) => {
 let messageQueue = {};
 
 io.on('connection', (socket) => {
-  console.log('User connected:', socket.id, 'User:', socket.user);
-
   socket.on('join-chat', async (chatId) => {
     try {
-      // Verify user has access to this chat
       const chat = await Chat.findById(chatId);
       if (!chat) {
         socket.emit('error', { message: 'Chat not found' });
@@ -95,26 +94,24 @@ io.on('connection', (socket) => {
         return;
       }
 
-      console.log(`Socket ${socket.id} joining chat:`, chatId);
       socket.join(chatId);
       socket.emit('joined-chat', { chatId });
     } catch (error) {
-      console.error('Error joining chat:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error joining chat:', error);
+      }
       socket.emit('error', { message: 'Failed to join chat' });
     }
   });
 
   socket.on('send-message', async (data) => {
     try {
-      console.log('Received message data:', data);
       const { chatId, message, sender } = data;
 
       if (!chatId || !message || !sender) {
-        console.error('Invalid message data:', data);
         return;
       }
 
-      // Verify sender is the authenticated user
       if (sender._id !== socket.user.id) {
         socket.emit('error', { message: 'Unauthorized sender' });
         return;
@@ -135,7 +132,6 @@ io.on('connection', (socket) => {
       chat.messages.push(newMessage);
       await chat.save();
       
-      // Broadcast message to all users in the chat
       const populatedMessage = {
         ...newMessage,
         sender: {
@@ -147,17 +143,20 @@ io.on('connection', (socket) => {
 
       io.to(chatId).emit('receive-message', populatedMessage);
     } catch (error) {
-      console.error('Error handling message:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error handling message:', error);
+      }
       socket.emit('error', { message: 'Failed to send message' });
     }
   });
 
   socket.on('error', (error) => {
-    console.error('Socket error:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Socket error:', error);
+    }
   });
 
   socket.on('disconnect', () => {
-    console.log('User disconnected:', socket.id);
   });
 });
 

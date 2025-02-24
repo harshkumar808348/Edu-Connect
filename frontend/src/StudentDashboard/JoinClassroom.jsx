@@ -11,7 +11,7 @@ const JoinClassroom = () => {
 
   const fetchJoinedClassrooms = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/classroom/student', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/classroom/student`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -35,7 +35,7 @@ const JoinClassroom = () => {
     setSuccess('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/classroom/join', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/classroom/join`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

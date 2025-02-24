@@ -9,9 +9,6 @@ const router = express.Router();
 // Get classroom chat history
 router.get('/classroom/:classroomId', auth, async (req, res) => {
   try {
-    console.log('Fetching chat for classroom:', req.params.classroomId);
-    console.log('User:', req.user);
-
     const chat = await Chat.findOne({ 
       classroom: req.params.classroomId,
       type: 'classroom'
@@ -28,14 +25,11 @@ router.get('/classroom/:classroomId', auth, async (req, res) => {
     });
 
     if (!chat) {
-      console.log('Creating new chat room');
-      // Create new chat room if it doesn't exist
       const classroom = await Classroom.findById(req.params.classroomId)
         .populate('teacher')
         .populate('students');
       
       if (!classroom) {
-        console.log('Classroom not found:', req.params.classroomId);
         return res.status(404).json({ message: 'Classroom not found' });
       }
 
@@ -47,14 +41,14 @@ router.get('/classroom/:classroomId', auth, async (req, res) => {
       });
 
       await newChat.save();
-      console.log('New chat room created:', newChat._id);
       return res.json(newChat);
     }
 
-    console.log('Found existing chat:', chat._id);
     res.json(chat);
   } catch (error) {
-    console.error('Chat error:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Chat error:', error);
+    }
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });

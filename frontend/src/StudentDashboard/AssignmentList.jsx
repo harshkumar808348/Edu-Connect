@@ -19,7 +19,7 @@ const AssignmentList = ({ classroomId }) => {
   const fetchAssignments = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/assignment/classroom/${classroomId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/assignment/classroom/${classroomId}`,
         {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -54,7 +54,7 @@ const AssignmentList = ({ classroomId }) => {
       });
 
       const response = await fetch(
-        `http://localhost:5000/api/assignment/submit/${selectedAssignment._id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/assignment/submit/${selectedAssignment._id}`,
         {
           method: 'POST',
           headers: {

@@ -24,7 +24,7 @@ const ChatComponent = ({ classroomId, userId, chatType = 'classroom' }) => {
         return;
       }
 
-      socketRef.current = io('http://localhost:5000', {
+      socketRef.current = io(import.meta.env.VITE_BACKEND_URL, {
         transports: ['websocket', 'polling'],
         reconnection: true,
         reconnectionAttempts: 5,
@@ -68,7 +68,7 @@ const ChatComponent = ({ classroomId, userId, chatType = 'classroom' }) => {
   const fetchChatHistory = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/chat/classroom/${classroomId}`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/chat/classroom/${classroomId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

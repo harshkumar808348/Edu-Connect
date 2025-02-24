@@ -50,7 +50,7 @@ const AssignmentForm = ({ classroomId, onAssignmentCreated }) => {
       });
 
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/assignment/create/${classroomId}`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/assignment/create/${classroomId}`, {
         method: 'POST',
         body: formDataToSend,
         headers: {
@@ -84,7 +84,7 @@ const AssignmentForm = ({ classroomId, onAssignmentCreated }) => {
   const fetchAssignments = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/assignment/classroom/${classroomId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/assignment/classroom/${classroomId}`,
         {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`

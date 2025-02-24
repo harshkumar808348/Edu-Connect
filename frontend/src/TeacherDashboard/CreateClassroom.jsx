@@ -34,7 +34,7 @@ const CreateClassroom = () => {
         return;
       }
 
-      const response = await fetch('http://localhost:5000/api/classroom/teacher', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/classroom/teacher`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -73,7 +73,7 @@ const CreateClassroom = () => {
         return;
       }
 
-      const response = await fetch('http://localhost:5000/api/classroom/create', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/classroom/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
