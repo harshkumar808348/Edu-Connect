@@ -26,8 +26,10 @@ const StudentLogin = () => {
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/student/login`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify(formData)
       });
 
