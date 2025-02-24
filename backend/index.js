@@ -19,9 +19,23 @@ const app = express();
 const httpServer = createServer(app);
 
 // Middleware
+const allowedOrigins = [
+  'https://edu-connect-zy9f.vercel.app',
+  'https://edu-connect-gamma.vercel.app',
+  'http://localhost:5173'
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:5173", // Vite's default port
-  credentials: true
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
@@ -36,6 +50,8 @@ mongoose.connect(process.env.MONGODB_URI, {
   console.log('Connected to MongoDB');
 })
 .catch((err) => console.error('MongoDB connection error:', err));
+// Add this before your routes
+app.options('*', cors()); // Enable pre-flight for all routes
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -45,9 +61,10 @@ app.use('/api/chat', chatRoutes);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
-    credentials: true
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization']
   },
   pingTimeout: 60000,
   pingInterval: 25000
