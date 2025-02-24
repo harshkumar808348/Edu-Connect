@@ -596,32 +596,23 @@ const AppRoutes = () => {
       <Navigation />
       <div className="pt-16">
         <Routes>
-          <Route path="/" element={
-            user ? (
-              <Navigate to={user.type === 'teacher' ? '/teacher/dashboard' : '/student/dashboard'} />
-            ) : (
-              <LandingPage />
-            )
-          } />
-          <Route path="/teacher/login" element={
-            user?.type === 'teacher' ? <Navigate to="/teacher/dashboard" /> : <TeacherLogin />
-          } />
-          <Route path="/student/login" element={
-            user?.type === 'student' ? <Navigate to="/student/dashboard" /> : <StudentLogin />
-          } />
-          <Route path="/teacher/register" element={<TeacherRegister />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/student/login" element={<StudentLogin />} />
           <Route path="/student/register" element={<StudentRegister />} />
-
-          <Route path="/teacher/dashboard" element={
-            <ProtectedRoute allowedTypes={['teacher']}>
-              <CreateClassroom />
-            </ProtectedRoute>
-          } />
+          <Route path="/teacher/login" element={<TeacherLogin />} />
+          <Route path="/teacher/register" element={<TeacherRegister />} />
           <Route path="/student/dashboard" element={
             <ProtectedRoute allowedTypes={['student']}>
               <JoinClassroom />
             </ProtectedRoute>
           } />
+          <Route path="/teacher/dashboard" element={
+            <ProtectedRoute allowedTypes={['teacher']}>
+              <CreateClassroom />
+            </ProtectedRoute>
+          } />
+          {/* Add a catch-all route */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
     </div>
