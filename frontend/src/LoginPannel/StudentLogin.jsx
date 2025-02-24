@@ -29,7 +29,6 @@ const StudentLogin = () => {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        credentials: 'include',
         body: JSON.stringify(formData)
       });
 
@@ -42,6 +41,7 @@ const StudentLogin = () => {
         setError(data.message || 'Login failed');
       }
     } catch (error) {
+      console.error('Login error:', error);
       setError('Network error occurred');
     }
   };
