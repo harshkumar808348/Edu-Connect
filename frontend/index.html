@@ -9,5 +9,23 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script type="text/javascript">
+      (function (loc) {
+        if (loc.search[0] === "/") {
+          var decoded = loc.search
+            .slice(1)
+            .split("&")
+            .map(function (s) {
+              return s.replace(/-and-/g, "&");
+            })
+            .join("?");
+          window.history.replaceState(
+            null,
+            null,
+            loc.pathname.slice(0, 1) + decoded + loc.hash
+          );
+        }
+      })(window.location);
+    </script>
   </body>
 </html>
