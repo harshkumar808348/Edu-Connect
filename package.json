@@ -6,7 +6,7 @@
  "scripts": {
  "scripts": {
   "dev": "nodemon backend/index.js",
-  "build": "npm install",
+   "build": "npm install && cd frontend && npm install && npm install vite @vitejs/plugin-react postcss autoprefixer tailwindcss --save-dev && npx vite build && cd ..",
   "start": "node backend/index.js"
 }
   "keywords": [],
