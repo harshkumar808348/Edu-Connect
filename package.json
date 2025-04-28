@@ -5,7 +5,7 @@
   "type": "module",
  "scripts": {
   "dev": "nodemon backend/index.js",
-  "build": "npm install && cd frontend && npm install && npm install vite --save-dev && npm run build && cd ..",
+  "build": "npm install && cd frontend && npm install && npx vite build && cd ..",
   "start": "node backend/index.js"
 },
   "keywords": [],
