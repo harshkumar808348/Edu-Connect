@@ -13,6 +13,7 @@ import User from './models/User.js';
 import './models/Classroom.js';
 import jwt from 'jsonwebtoken';
 import connectDB from './config/db.js';
+import path from 'path';
 
 dotenv.config();
 
@@ -20,24 +21,12 @@ const app = express();
 const httpServer = createServer(app);
 
 // Middleware
-const allowedOrigins = [
-  'https://edu-connect-zy9f.vercel.app',
-  'https://edu-connect-gamma.vercel.app',
-  'http://localhost:5173'
-];
-
-app.use(cors({
-  origin: function(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+const corsOptions={
+  origin: 'http://localhost:5173',
   credentials: true
-}));
+}
+
+app.use(cors(corsOptions));
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
@@ -45,12 +34,21 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 // Connect to MongoDB
 connectDB();
 
+const _dirname = path.resolve();
+
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/classroom', classroomRoutes);
 app.use('/api/assignment', assignmentRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/attendance', attendanceRoutes);
+
+app.use(express.static(path.join(_dirname, "frontend/dist")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(_dirname, "frontend/dist", "index.html"));
+  
+})
 
 const io = new Server(httpServer, {
   cors: {
