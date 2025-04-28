@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import CreateClassroom from './CreateClassroom';
 import AssignmentManager from './AssignmentManager';
@@ -8,6 +8,12 @@ import TeacherProfile from './TeacherProfile';
 const TeacherDashboard = () => {
   const [activeTab, setActiveTab] = useState('classrooms');
   const { user, logout } = useAuth();
+
+  // Add this to prevent initial scroll
+  useEffect(() => {
+    window.history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+  }, []);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -90,9 +96,11 @@ const TeacherDashboard = () => {
         </div>
       </nav>
 
-      {/* Main Content */}
+      {/* Main Content with auto-scroll prevention */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {renderContent()}
+        <div className="overflow-visible">
+          {renderContent()}
+        </div>
       </main>
     </div>
   );

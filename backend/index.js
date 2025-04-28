@@ -1,17 +1,18 @@
 import express from 'express';
 import { createServer } from 'http';
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import authRoutes from './routes/auth.js';
 import classroomRoutes from './routes/classroom.js';
 import assignmentRoutes from './routes/assignment.js';
 import chatRoutes from './routes/chat.js';
+import attendanceRoutes from './routes/attendance.js';
 import { Server } from 'socket.io';
 import Chat from './models/Chat.js';
 import User from './models/User.js';
 import './models/Classroom.js';
 import jwt from 'jsonwebtoken';
+import connectDB from './config/db.js';
 
 dotenv.config();
 
@@ -37,27 +38,19 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
+
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  tlsAllowInvalidCertificates: true,
-})
-.then(() => {
-  console.log('Connected to MongoDB');
-})
-.catch((err) => console.error('MongoDB connection error:', err));
-// Add this before your routes
-app.options('*', cors()); // Enable pre-flight for all routes
+connectDB();
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/classroom', classroomRoutes);
 app.use('/api/assignment', assignmentRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/attendance', attendanceRoutes);
 
 const io = new Server(httpServer, {
   cors: {

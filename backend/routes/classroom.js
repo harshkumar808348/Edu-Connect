@@ -1,5 +1,5 @@
 import express from 'express';
-import { auth } from '../middleware/auth.js';
+import auth from '../middleware/auth.js';
 import Classroom from '../models/Classroom.js';
 import Teacher from '../models/Teacher.js';
 import Student from '../models/Student.js';
@@ -110,6 +110,61 @@ router.get('/student', auth, async (req, res) => {
       });
 
     res.json(student.joinedClassrooms);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Add this route to handle student removal
+router.post('/:classroomId/remove-student', auth, async (req, res) => {
+  try {
+    if (req.user.type !== 'teacher') {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    const { studentId } = req.body;
+    const classroom = await Classroom.findById(req.params.classroomId);
+
+    if (!classroom) {
+      return res.status(404).json({ message: 'Classroom not found' });
+    }
+
+    if (classroom.teacher.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    // Remove student from classroom
+    classroom.students = classroom.students.filter(
+      student => student.toString() !== studentId
+    );
+    await classroom.save();
+
+    // Remove classroom from student's joinedClassrooms
+    const student = await Student.findById(studentId);
+    if (student) {
+      student.joinedClassrooms = student.joinedClassrooms.filter(
+        classId => classId.toString() !== req.params.classroomId
+      );
+      await student.save();
+    }
+
+    res.json({ message: 'Student removed successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Get classroom students
+router.get('/:classroomId/students', auth, async (req, res) => {
+  try {
+    const classroom = await Classroom.findById(req.params.classroomId)
+      .populate('students', 'name email');
+    
+    if (!classroom) {
+      return res.status(404).json({ message: 'Classroom not found' });
+    }
+
+    res.json(classroom.students);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }

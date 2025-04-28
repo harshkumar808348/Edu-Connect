@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import JoinClassroom from './JoinClassroom';
 
 const StudentDashboard = () => {
   const { user, logout } = useAuth();
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleLogout = () => {
     logout();
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <nav className="bg-white shadow-md p-4">
+    <div className="min-h-screen bg-gray-100 overflow-x-hidden">
+      <nav className="bg-white shadow-md p-4 fixed top-0 w-full z-50">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <h1 className="text-xl font-semibold">Student Dashboard</h1>
           <div className="flex items-center gap-4">
@@ -25,7 +29,7 @@ const StudentDashboard = () => {
           </div>
         </div>
       </nav>
-      <div className="container mx-auto py-8">
+      <div className="container mx-auto py-8 mt-16">
         <JoinClassroom />
       </div>
     </div>

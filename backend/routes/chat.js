@@ -1,5 +1,5 @@
 import express from 'express';
-import { auth } from '../middleware/auth.js';
+import auth from '../middleware/auth.js';
 import Chat from '../models/Chat.js';
 import Classroom from '../models/Classroom.js';
 import User from '../models/User.js';

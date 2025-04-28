@@ -13,10 +13,12 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: #f3f4f6;
+  overflow-x: hidden;
 }
 
 #root {
   min-height: 100vh;
+  position: relative;
 }
 
 /* Custom styles */
@@ -36,5 +38,14 @@ body {
   .card {
     @apply bg-white rounded-lg shadow-md p-6;
   }
+}
+
+/* Prevent unwanted scrolling */
+.prevent-auto-scroll {
+  overflow-anchor: none;
+}
+
+html {
+  scroll-behavior: auto !important;
 }
 

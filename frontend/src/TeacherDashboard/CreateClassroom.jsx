@@ -4,6 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import AssignmentForm from './AssignmentForm';
 import ChatComponent from '../components/ChatComponent';
 import Whiteboard from './Whiteboard';
+import ManageStudents from './ManageStudents';
+import AttendanceForm from './AttendanceForm';
 
 const CreateClassroom = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +19,9 @@ const CreateClassroom = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [selectedClassroom, setSelectedClassroom] = useState(null);
+  const [showStudents, setShowStudents] = useState(false);
+  const [activeTab, setActiveTab] = useState('assignments');
 
   useEffect(() => {
     if (!user) {
@@ -24,6 +29,7 @@ const CreateClassroom = () => {
       return;
     }
     fetchClassrooms();
+    window.scrollTo(0, 0);
   }, [user, navigate]);
 
   const fetchClassrooms = async () => {
@@ -97,6 +103,18 @@ const CreateClassroom = () => {
     }
   };
 
+  const handleStudentRemoved = (studentId) => {
+    setClassrooms(classrooms.map(classroom => {
+      if (classroom._id === selectedClassroom) {
+        return {
+          ...classroom,
+          students: classroom.students.filter(student => student._id !== studentId)
+        };
+      }
+      return classroom;
+    }));
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -106,7 +124,7 @@ const CreateClassroom = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 overflow-visible">
       {/* Top Stats Bar */}
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -198,25 +216,6 @@ const CreateClassroom = () => {
                 </button>
               </form>
             </div>
-
-            {/* Quick Actions */}
-            <div className="mt-6 bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
-              <nav className="space-y-2">
-                <button className="w-full flex items-center px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 rounded-md">
-                  <span className="mr-3">📝</span>
-                  Create Assignment
-                </button>
-                <button className="w-full flex items-center px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 rounded-md">
-                  <span className="mr-3">📊</span>
-                  View Reports
-                </button>
-                <button className="w-full flex items-center px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 rounded-md">
-                  <span className="mr-3">👥</span>
-                  Manage Students
-                </button>
-              </nav>
-            </div>
           </div>
 
           {/* Classrooms List */}
@@ -251,26 +250,78 @@ const CreateClassroom = () => {
                       <div className="flex items-center justify-between mb-4">
                         <div>
                           <h3 className="text-lg font-medium text-gray-900">{classroom.name}</h3>
-                          <p className="text-sm text-gray-500">Teacher: {classroom.teacher.name}</p>
                           <p className="text-sm text-gray-500">Subject: {classroom.subject}</p>
+                          <p className="text-sm text-gray-500">
+                            Students: {classroom.students?.length || 0}
+                          </p>
                         </div>
-                        <span className="px-3 py-1 text-sm text-green-700 bg-green-100 rounded-full">
-                          Active
-                        </span>
+                        
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => {
+                              setShowStudents(true);
+                              setSelectedClassroom(classroom._id);
+                            }}
+                            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                          >
+                            Manage Students
+                          </button>
+                        </div>
                       </div>
-                      
+
+                      {/* Tab Navigation */}
+                      <div className="border-b border-gray-200 mb-4">
+                        <nav className="flex space-x-8" aria-label="Tabs">
+                          <button
+                            onClick={() => setActiveTab('assignments')}
+                            className={`${
+                              activeTab === 'assignments'
+                                ? 'border-blue-500 text-blue-600'
+                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                            } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+                          >
+                            Assignments
+                          </button>
+                          <button
+                            onClick={() => setActiveTab('attendance')}
+                            className={`${
+                              activeTab === 'attendance'
+                                ? 'border-blue-500 text-blue-600'
+                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                            } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+                          >
+                            Attendance
+                          </button>
+                          <button
+                            onClick={() => setActiveTab('chat')}
+                            className={`${
+                              activeTab === 'chat'
+                                ? 'border-blue-500 text-blue-600'
+                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                            } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+                          >
+                            Class Discussion
+                          </button>
+                        </nav>
+                      </div>
+
+                      {/* Tab Content */}
                       <div className="mt-6 space-y-6">
-                        <AssignmentForm 
-                          classroomId={classroom._id} 
-                          onAssignmentCreated={() => fetchClassrooms()}
-                        />
-                        <div className="border-t pt-6">
-                          <h4 className="text-lg font-medium text-gray-900 mb-4">Class Discussion</h4>
-                          <ChatComponent 
-                            classroomId={classroom._id}
-                            chatType="classroom"
+                        {activeTab === 'assignments' ? (
+                          <AssignmentForm 
+                            classroomId={classroom._id} 
+                            onAssignmentCreated={() => fetchClassrooms()}
                           />
-                        </div>
+                        ) : activeTab === 'attendance' ? (
+                          <AttendanceForm classroomId={classroom._id} />
+                        ) : (
+                          <div>
+                            <ChatComponent 
+                              classroomId={classroom._id}
+                              chatType="classroom"
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -280,6 +331,28 @@ const CreateClassroom = () => {
           </div>
         </div>
       </div>
+
+      {showStudents && selectedClassroom && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold">Manage Students</h2>
+                <button
+                  onClick={() => setShowStudents(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  ✕
+                </button>
+              </div>
+              <ManageStudents
+                classroomId={selectedClassroom}
+                onStudentRemoved={handleStudentRemoved}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

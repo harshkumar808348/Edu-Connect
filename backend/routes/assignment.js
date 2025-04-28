@@ -1,5 +1,5 @@
 import express from 'express';
-import { auth } from '../middleware/auth.js';
+import auth from '../middleware/auth.js';
 import Assignment from '../models/Assignment.js';
 import Submission from '../models/Submission.js';
 import cloudinary from '../config/cloudinary.js';
