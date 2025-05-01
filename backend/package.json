@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon backend/index.js",
-    "build": "cd frontend && npm install && npm install vite@latest @vitejs/plugin-react postcss autoprefixer tailwindcss --save && npx vite build && cd ..",
+    "dev": "nodemon index.js",
+    "build": "npm install && npm run build",
     "start": "nodemon index.js"
   },
   "keywords": [],
