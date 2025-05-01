@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon backend/index.js",
-    "build": "npm install && cd frontend && npm install && npm install vite @vitejs/plugin-react postcss autoprefixer tailwindcss --save-dev && npx vite build && cd ..",
+    "build": "cd frontend && npm install && npm install vite@latest @vitejs/plugin-react postcss autoprefixer tailwindcss --save && npm run build && cd ..",
     "start": "node backend/index.js"
   },
   "keywords": [],
