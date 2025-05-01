@@ -3,21 +3,12 @@
   "version": "1.0.0",
   "description": "Education Management System",
   "main": "index.js",
-<<<<<<< HEAD
-  "scripts": {
-    "start": "node backend/server.js",
-    "build": "cd frontend && npm install && npm run build",
-    "dev": "nodemon backend/server.js"
-  },
-=======
   "type": "module",
- "scripts": {
- "scripts": {
-  "dev": "nodemon backend/index.js",
-   "build": "npm install && cd frontend && npm install && npm install vite @vitejs/plugin-react postcss autoprefixer tailwindcss --save-dev && npx vite build && cd ..",
-  "start": "node backend/index.js"
-}
->>>>>>> d54f29b2c88cbf22782a5c00bf73777d91c005a9
+  "scripts": {
+    "dev": "nodemon backend/index.js",
+    "build": "npm install && cd frontend && npm install && npm install vite @vitejs/plugin-react postcss autoprefixer tailwindcss --save-dev && npx vite build && cd ..",
+    "start": "node backend/index.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
