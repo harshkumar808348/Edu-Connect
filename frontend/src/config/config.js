@@ -1,6 +1,6 @@
 const config = {
   API_URL: import.meta.env.PROD 
-    ? 'https://edu-connect-gamma.vercel.app/api'  // Production backend URL
+    ? 'https://edu-connect-2.onrender.com/api'  // Update this to your Render backend URL
     : 'http://localhost:3000/api'                 // Development backend URL
 };
 
