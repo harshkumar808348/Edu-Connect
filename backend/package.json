@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon backend/index.js",
     "build": "cd frontend && npm install && npm install vite@latest @vitejs/plugin-react postcss autoprefixer tailwindcss --save && npx vite build && cd ..",
-    "start": "node backend/index.js"
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
