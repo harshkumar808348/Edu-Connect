@@ -1,17 +1,16 @@
 {
-  "name": "backend",
+  "name": "edu-connect",
   "version": "1.0.0",
+  "description": "Education Management System",
   "main": "index.js",
-  "type": "module",
- "scripts": {
-  "dev": "nodemon backend/index.js",
-  "build": "npm install && cd frontend && npm install && npx vite build && cd ..",
-  "start": "node backend/index.js"
-},
+  "scripts": {
+    "start": "node backend/server.js",
+    "build": "cd frontend && npm install && npm run build",
+    "dev": "nodemon backend/server.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.37.0",
