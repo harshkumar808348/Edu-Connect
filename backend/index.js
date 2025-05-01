@@ -21,12 +21,16 @@ const app = express();
 const httpServer = createServer(app);
 
 // Middleware
-const corsOptions={
-  origin: 'http://localhost:5173',
-  credentials: true
-}
-
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: [
+    'https://edu-connect-2.onrender.com',  // Your Render frontend URL
+    'http://localhost:5173',               // Local development URL
+    'http://localhost:3000'                // Local development URL
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
