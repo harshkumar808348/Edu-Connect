@@ -1,7 +1,5 @@
 const config = {
-  API_URL: import.meta.env.PROD 
-    ? 'https://edu-connect-2.onrender.com/api'  // Update this to your Render backend URL
-    : 'http://localhost:3000/api'                 // Development backend URL
+  API_URL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
 };
 
 export default config; 

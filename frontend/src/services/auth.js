@@ -9,12 +9,12 @@ export const registerStudent = async (userData) => {
         'Accept': 'application/json'
       },
       mode: 'cors',
-      credentials: 'include',
       body: JSON.stringify(userData)
     });
     
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const error = await response.json();
+      throw new Error(error.message || 'Registration failed');
     }
     return await response.json();
   } catch (error) {
@@ -32,12 +32,12 @@ export const loginStudent = async (credentials) => {
         'Accept': 'application/json'
       },
       mode: 'cors',
-      credentials: 'include',
       body: JSON.stringify(credentials)
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const error = await response.json();
+      throw new Error(error.message || 'Login failed');
     }
     return await response.json();
   } catch (error) {
